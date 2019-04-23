@@ -1,11 +1,14 @@
 {
-  "name": "shield",
-  "version": "1.0.0",
+  "name": "laplax",
+  "version": "0.1.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "./types.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "nodemon -w ./ --exec ts-node ./debug/index.ts -P ."
+    "debug": "nodemon -w ./ --exec ts-node ./debug/index.ts -P .",
+    "build": "tsc",
+    "prepare": "npm run build"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +19,6 @@
     "typescript": "^3.4.4"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
-    "fast-safe-stringify": "^2.0.6"
+    "chalk": "^2.4.2"
   }
 }

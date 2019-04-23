@@ -1,10 +1,10 @@
-import * as Shield from '../src'
+import * as Shield from '../dist'
 import "./slave"
-export interface Gossip {
+export interface DataType {
   name: string
 }
 
-const master = new Shield.Master<Gossip>()
+const master = new Shield.Master<DataType>()
 master.enslave('GET', '/', ({req, res}) => {
   res.write('Hello!')
   return {

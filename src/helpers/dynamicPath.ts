@@ -1,18 +1,18 @@
-import { Shield } from '../../types'
+import { Laplax } from '../../types'
 
 export const parseURLParams = (
-  req: Shield.ShieldReq,
+  req: Laplax.ShieldReq,
   keys: string[],
   regex: RegExp,
   path: string
-): Shield.ShieldReq => {
+): Laplax.ShieldReq => {
   const matches = path.match(regex) || []
   const params = keys.reduce(
     (params, key, i) => {
       params[key] = matches[i]
       return params
     },
-    {} as Shield.KeyValueMap
+    {} as Laplax.KeyValueMap
   )
 
   req.params = Object.assign(req.params, params)

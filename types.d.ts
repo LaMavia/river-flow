@@ -1,6 +1,7 @@
-import http from 'http'
+import http from 'http' 
 import { Chalk } from 'chalk'
 import { Master } from './src';
+import "./src/index"
 
 declare interface ChalkColors {
   readonly reset: Chalk
@@ -51,9 +52,9 @@ declare interface ChalkColors {
   readonly bgWhiteBright: Chalk
 }
 
-declare type Executable<T> = (arg: Shield.KeyValueMap) => T
+declare type Executable<T> = (arg: Laplax.KeyValueMap) => T
 
-declare namespace Shield {
+declare namespace Laplax {
   interface KeyValueMap<T = any> {
     [key: string]: T
   }
@@ -91,7 +92,7 @@ declare global {
   namespace NodeJS {
     interface Global {
       __Master: Master
-      __exportedRoutes: Shield.RouteExport[]
+      __exportedRoutes: Laplax.RouteExport[]
     }
   }
 }

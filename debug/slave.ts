@@ -1,4 +1,3 @@
-import { Shield } from "../types";
 import { Master } from "../src";
 
 export default Master.route(["GET", "/slave", ({ res }) => {
