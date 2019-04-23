@@ -1,72 +1,124 @@
 import http from 'http'
-import cp from 'child_process'
-import { Curry } from './decorators/curry'
+import cp, { ChildProcess } from 'child_process'
 import { Shield } from '../types'
 import { schemaToRegExp } from './helpers/dynamicPath'
+import { extname } from 'path'
+import { parseBody } from './helpers/parseBody'
+import npath, { resolve } from 'path'
+import { initLogger, LoggerFunction } from './helpers/logger'
 
-export class Master {
+export class Master<DataType extends Shield.KeyValueMap = Shield.KeyValueMap> {
   server: http.Server
-  slaves_register: Shield.SlaveRegistry[] = []
+  slavesRegister: Shield.SlaveRegistry[]
+  logger: LoggerFunction
 
   constructor() {
-    this.server = http.createServer(this.on_request.bind(this))
+    this.slavesRegister = []
+    this.server = http.createServer(this.onRequest.bind(this))
+    this.logger = initLogger('Master', 'italic')
+    global.__Master = this
+    for(const props of global.__exportedRoutes) this.enslave(...props)
   }
 
-  @Curry
-  enslave(method: Shield.HTTPMethod, path: string, path_to_slave: string) {
+  get ext() {
+    return process.mainModule ? extname(process.mainModule.filename) : '.js'
+  }
+
+  static route(props: Shield.RouteExport) {
+    if(!global.__exportedRoutes) global.__exportedRoutes = []
+    global.__exportedRoutes.push(props)
+  }
+
+  enslave(
+    method: Shield.HTTPMethod,
+    path: string,
+    callback: Shield.Shieldback
+  ) {
+    const dir = npath.dirname(
+      (require.main && require.main.filename) || __filename
+    )
+    debugger
     const reg = {
       method,
       path: schemaToRegExp(path),
-      path_to_slave
+      callback,
     } as Shield.SlaveRegistry
-    this.slaves_register.push(reg)
+
+    this.slavesRegister && this.slavesRegister.push(reg)
     return reg
   }
 
-  @Curry
-  get(path: string, path_to_slave: string) {
-    return this.enslave('GET', path, path_to_slave)
+  get(path: string, callback: Shield.Shieldback) {
+    return this.enslave('GET', path, callback)
   }
 
-  @Curry
-  post(path: string, path_to_slave: string) {
-    return this.enslave('POST', path, path_to_slave)
+  post(path: string, callback: Shield.Shieldback) {
+    return this.enslave('POST', path, callback)
   }
 
-  @Curry
-  delete(path: string, path_to_slave: string) {
-    return this.enslave('DELETE', path, path_to_slave)
+  delete(path: string, callback: Shield.Shieldback) {
+    return this.enslave('DELETE', path, callback)
   }
 
-  @Curry
-  update(path: string, path_to_slave: string) {
-    return this.enslave('GET', path, path_to_slave)
+  update(path: string, callback: Shield.Shieldback) {
+    return this.enslave('GET', path, callback)
   }
 
-  *iterOverSlaves(method: Shield.HTTPMethod, path: string) {
-    for (const slave of this.slaves_register.filter(
-      r => r.method === method && r.path[0].test(path)
-    )) {
-      yield new Promise<Shield.Response<any>>((res, rej) => {
-        const p = cp.fork(slave.path_to_slave)
-        p.on('message', (msg: Shield.Response<any>) => {
-          res(msg)
-        })
-        p.on('error', rej)
-      })
+  *stroll(
+    req: Shield.ShieldReq,
+    res: Shield.ShieldRes,
+    method: Shield.HTTPMethod,
+    path: string
+  ): IterableIterator<Shield.Message<DataType>> {
+    let lastMsg: Shield.Message<DataType> = {
+      req,
+      res,
+      path,
+      method,
+      continue: true,
+      error: null,
+      ok: true,
+      data: {} as DataType,
     }
+
+    for (const slave of this.slavesRegister
+      .filter(s => {
+        debugger
+        return s.path[0].test(path)
+      })
+      .sort((a, b) => {
+        const gl = (a: any): number => (a.path[0].source.match(/\//) || []).length
+        debugger
+        return gl(b) - gl(a)
+      })
+      ) {
+      const msg = slave.callback(lastMsg)
+      if (msg) Object.assign(lastMsg, msg)
+      yield lastMsg
+      if (lastMsg.error) this.logger(lastMsg.error)
+      if (!lastMsg.continue) break
+    }
+
+    res.end()
   }
 
-  async on_request(req: http.IncomingMessage, res: http.ServerResponse) {
-    const method = req.method as Shield.HTTPMethod
-    const url = req.url || ''
+  async onRequest(_req: http.IncomingMessage, res: http.ServerResponse) {
+    const method = _req.method as Shield.HTTPMethod
+    const url = _req.url || ''
+    const req: Shield.ShieldReq = Object.assign({}, _req, {
+      body: await parseBody(_req),
+      params: {},
+    }) as Shield.ShieldReq
 
-    for await (const slave_reg of this.iterOverSlaves(method, url)) {
-      slave_reg
+    for (const msg of this.stroll(req, res, method, url)) {
+      debugger
     }
   }
 
   listen(port: number = 8000) {
-    return this.server.listen(port)
+
+    this.server.listen(port)
+    this.logger(`Listening @${port}`)
+    return this
   }
 }

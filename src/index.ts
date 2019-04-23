@@ -1,1 +1,1 @@
-export * from "./Slave"
+export * from './Master'

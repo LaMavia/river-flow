@@ -1,12 +1,18 @@
-import { Shield } from "../types";
+import { Shield } from '../types'
+import { EventEmitter } from 'events';
 
-export class Slave {
+export abstract class Slave<GossipType extends Shield.KeyValueMap = Shield.KeyValueMap> extends EventEmitter {
   constructor() {
-    process.on("message", this.onMessage)
-    NodeJS
+    super()
+    global.process.on('message', this.onMessage.bind(this))
+    this.on("end", this.onEnd.bind(this))
   }
 
-  onMessage(data: Shield.Message) {
-      
+  onEnd(msg: Shield.Message<GossipType>) {
+    process.send&&process.send(msg)
+  }
+
+  onMessage(msg: Shield.Message<GossipType>) {
+    
   }
 }
