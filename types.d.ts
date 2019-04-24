@@ -1,7 +1,7 @@
-import http from 'http' 
+import http from 'http'
 import { Chalk } from 'chalk'
-import { Master } from './src';
-import "./src/index"
+import { Master } from './src'
+import './src/index'
 
 declare interface ChalkColors {
   readonly reset: Chalk
@@ -59,7 +59,10 @@ declare namespace Laplax {
     [key: string]: T
   }
 
-  type Shieldback<T = KeyValueMap> = (message: Message<T>) => Partial<Message<T>> | void
+  type SBReturnType = Partial<RouteResponse> | void
+  type Shieldback<T = KeyValueMap> = (
+    message: RouteResponse
+  ) => SBReturnType | Promise<SBReturnType>
 
   type RouteExport = [HTTPMethod, string, Shieldback]
 
@@ -77,7 +80,7 @@ declare namespace Laplax {
 
   interface ShieldRes extends http.ServerResponse {}
 
-  interface Message<DataType extends KeyValueMap = KeyValueMap> {
+  interface RouteResponse {
     req: ShieldReq
     res: ShieldRes
     path: string
@@ -85,7 +88,22 @@ declare namespace Laplax {
     ok: boolean
     error: Error | null
     continue: boolean
-    data: DataType
+  }
+
+  interface Message {
+    workerId: string
+    type: "get" | "post" | "update" | "delete"
+    key: string
+    payload?: any
+  }
+
+  interface ResponseMessage {
+    data: any
+    error?: Error
+  }
+
+  interface DBResponseMessage extends ResponseMessage {
+    key: string
   }
 }
 declare global {
@@ -93,6 +111,10 @@ declare global {
     interface Global {
       __Master: Master
       __exportedRoutes: Laplax.RouteExport[]
+    }
+
+    interface ProcessEnv {
+      workerId: string
     }
   }
 }

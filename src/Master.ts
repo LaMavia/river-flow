@@ -7,16 +7,22 @@ import npath, { resolve } from 'path'
 import { initLogger, LoggerFunction } from './helpers/logger'
 import cl from 'cluster'
 import { cpus } from 'os'
+import { add } from './helpers/add'
+import { randomEnoughID } from './helpers/randomEnoughID'
 
 export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
-  slavesRegister: Laplax.SlaveRegistry[]
+  routesRegistry: Laplax.SlaveRegistry[]
   logger: LoggerFunction
+  private slavesRegistry: Laplax.KeyValueMap<cl.Worker> = {}
+  private state: Laplax.KeyValueMap = {
+    name: 'Jon Snow',
+  }
 
-  constructor() { 
-    this.slavesRegister = []
+  constructor() {
+    this.routesRegistry = []
     this.logger = initLogger('Master', 'italic')
-    global.__Master = this
-    if(!global.__exportedRoutes) global.__exportedRoutes = []
+    if (cl.isMaster) global.__Master = this
+    if (!global.__exportedRoutes) global.__exportedRoutes = []
     for (const props of global.__exportedRoutes) this.enslave(...props)
   }
 
@@ -34,19 +40,15 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
     path: string,
     callback: Laplax.Shieldback
   ) {
-    const dir = npath.dirname(
-      (require.main && require.main.filename) || __filename
-    )
-    debugger
     const reg = {
       method,
       path: schemaToRegExp(path),
       callback,
     } as Laplax.SlaveRegistry
 
-    if (this.slavesRegister) {
-      this.slavesRegister.push(reg)
-      this.slavesRegister = this.slavesRegister.sort((a, b) => {
+    if (this.routesRegistry) {
+      this.routesRegistry.push(reg)
+      this.routesRegistry = this.routesRegistry.sort((a, b) => {
         const gl = (a: any): number =>
           (a.path[0].source.match(/\//) || []).length
         debugger
@@ -72,13 +74,13 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
     return this.enslave('GET', path, callback)
   }
 
-  *stroll(
+  async *stroll(
     req: Laplax.ShieldReq,
     res: Laplax.ShieldRes,
     method: Laplax.HTTPMethod,
     path: string
-  ): IterableIterator<Laplax.Message<DataType>> {
-    let lastMsg: Laplax.Message<DataType> = {
+  ): AsyncIterableIterator<Laplax.RouteResponse> {
+    let lastMsg: Laplax.RouteResponse = {
       req,
       res,
       path,
@@ -86,14 +88,11 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
       continue: true,
       error: null,
       ok: true,
-      data: {} as DataType,
     }
 
-    for (const slave of this.slavesRegister.filter(s => {
-      debugger
-      return s.path[0].test(path)
-    })) {
-      const msg = slave.callback(lastMsg)
+    for (const slave of this.routesRegistry) {
+      if(!slave.path[0].test(path)) continue
+      const msg = await slave.callback(lastMsg)
       if (msg) Object.assign(lastMsg, msg)
       yield lastMsg
       if (lastMsg.error) this.logger(lastMsg.error)
@@ -111,19 +110,79 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
       params: {},
     }) as Laplax.ShieldReq
 
-    for (const msg of this.stroll(req, res, method, url)) {
-      debugger
+    for await (const _ of this.stroll(req, res, method, url)) {
     }
+  }
+
+  private Database({
+    type,
+    payload,
+    key,
+    workerId,
+  }: Laplax.Message): Laplax.DBResponseMessage {
+    let data: any
+    let error: any
+    try {
+      switch (type) {
+        case 'get':
+          data = this.state[key]
+          break
+        case 'delete':
+          {
+            delete this.state[key]
+            data = !this.state[key]
+          }
+          break
+        case 'post':
+          const { data: d, error: err } = add(this.state[key], payload)
+          data = d
+          error = err
+          break
+        case 'update':
+          data = this.state[key] = payload
+          break
+        default:
+          error = new Error(`Invalid database request type: ${type}`)
+          break
+      }
+    } catch (err) {
+      error = err
+    }
+
+    return {
+      data,
+      error,
+      key,
+    }
+  }
+
+  private MasterInitEvents(slave: cl.Worker, id: string) {
+    slave.on('message', this.MasterOnMessage.bind(this))
+    slave.on('online', () => {
+      this.logger(`Slave ready! (${id})`)
+    })
+  }
+
+  private MasterOnMessage(msg: Laplax.Message) {
+    let res = this.Database(msg)
+    // console.dir(msg, {colors: true, depth: 2})
+    this.slavesRegistry[msg.workerId].send(res)
   }
 
   listen(port: number) {
     if (cl.isMaster) {
       const n = cpus().length
-      for (let i = 0; i < n; i++) cl.fork()
+      for (let i = 0; i < n; i++) {
+        const id = randomEnoughID()
+        const slave = cl.fork({ workerId: id })
+        this.MasterInitEvents(slave, id)
+        this.slavesRegistry[id] = slave
+      }
       this.logger(`Starting Master @${port} with ${n} Slaves`)
     } else {
       const server = http.createServer(this.onRequest.bind(this))
       server.listen(port)
+      cl.emit('online')
     }
   }
 }
