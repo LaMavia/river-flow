@@ -38,7 +38,7 @@ master.enslave('GET', '/', async ({ res }) => {
     ]
   })
   
-  res.write(`You know nothing ${data}`)
+  res.write(`You know nothing ${name}`)
   return {
     continue: false,
   }
