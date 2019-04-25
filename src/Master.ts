@@ -91,7 +91,7 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
     }
 
     for (const slave of this.routesRegistry) {
-      if(!slave.path[0].test(path)) continue
+      if (!slave.path[0].test(path)) continue
       const msg = await slave.callback(lastMsg)
       if (msg) Object.assign(lastMsg, msg)
       yield lastMsg
@@ -118,8 +118,7 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
     type,
     payload,
     key,
-    workerId,
-  }: Laplax.Message): Laplax.DBResponseMessage {
+  }: Laplax.MessageRequest): Laplax.DBResponseMessage {
     let data: any
     let error: any
     try {
@@ -158,13 +157,20 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
 
   private MasterInitEvents(slave: cl.Worker, id: string) {
     slave.on('message', this.MasterOnMessage.bind(this))
-    slave.on('online', () => {
+    slave.on('listening', () => {
       this.logger(`Slave ready! (${id})`)
     })
   }
 
   private MasterOnMessage(msg: Laplax.Message) {
-    let res = this.Database(msg)
+    const res: Laplax.SendMessageResponse = {
+      errors: []
+    }
+    for (const req of msg.msgs) {
+      const { data, key, error } = this.Database(req)
+      res[key] = data
+      if(error) res.errors.push(error)
+    }
     // console.dir(msg, {colors: true, depth: 2})
     this.slavesRegistry[msg.workerId].send(res)
   }

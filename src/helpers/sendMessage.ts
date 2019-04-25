@@ -5,10 +5,10 @@ import fs from 'fs'
 export const sendMessage = (
   process: NodeJS.Process,
   msg: Laplax.Message
-): Promise<Laplax.DBResponseMessage> =>
+): Promise<Laplax.ResponseMessage> =>
   new Promise((res, rej) => {
     if (!process.send) throw new Error('Process.send in undefiend')
-    function onRes(msg: Laplax.DBResponseMessage) {
+    function onRes(msg: Laplax.ResponseMessage) {
       process.removeListener('message', onRes)
       res(msg)
     }

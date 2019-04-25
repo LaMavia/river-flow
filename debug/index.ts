@@ -6,30 +6,19 @@ export interface DataType {
 
 const master = new Master<DataType>()
 master.enslave('GET', '/', async ({ res }) => {
-  // const r = await new Promise(res => {
-  //   if (!process.send) throw new Error('Process.send in undefiend')
-  //   process.once('message', res)
-  //   process.send({
-  //     key: 'name',
-  //     type: 'get',
-  //     payload: 'Jon Snow',
-  //     workerId: process.env['workerId'],
-  //   } as Laplax.Message)
-  // })
-  /**/
-  // if(process.listeners('message').length < 2) {
-    await sendMessage(process, {
-      key: 'name',
-      type: 'get',
-      payload: 'Jon Snow',
-      workerId: process.env['workerId'],
-    })
-  // }
+  const r = await sendMessage(process, {
+    msgs: [
+      {
+        key: 'name',
+        type: 'update',
+        payload: 'Jon Snow'
+      }
+    ],
+    workerId: process.env['workerId'],
+  })
   
-  
-  /*
   initLogger(`Slave#${process.env['workerId']}`, "whiteBright")(JSON.stringify(r))
- */
+  
   res.write('HELLO!')
   return {
     continue: false,

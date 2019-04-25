@@ -92,18 +92,26 @@ declare namespace Laplax {
 
   interface Message {
     workerId: string
+    msgs: MessageRequest[]
+  }
+
+  interface MessageRequest {
     type: "get" | "post" | "update" | "delete"
     key: string
     payload?: any
   }
 
   interface ResponseMessage {
-    data: any
+    data: KeyValueMap
     error?: Error
   }
 
   interface DBResponseMessage extends ResponseMessage {
     key: string
+  }
+
+  interface SendMessageResponse extends KeyValueMap {
+    errors: Error[]
   }
 }
 declare global {
