@@ -1,29 +1,35 @@
 import http from 'http'
-import { Laplax } from '../types'
-import { schemaToRegExp } from './helpers/dynamicPath'
+import { Laplax, ChalkColors } from '../types'
 import { extname } from 'path'
-import { parseBody } from './helpers/parseBody'
-import npath, { resolve } from 'path'
-import { initLogger, LoggerFunction } from './helpers/logger'
 import cl from 'cluster'
 import { cpus } from 'os'
-import { add } from './helpers/add'
-import { randomEnoughID } from './helpers/randomEnoughID'
+import {
+  randomEnoughID,
+  send,
+  add,
+  initLogger,
+  LoggerFunction,
+  parseBody,
+  schemaToRegExp,
+} from './helpers/'
+import cp from 'child_process'
 
-export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
+export class Master {
   routesRegistry: Laplax.SlaveRegistry[]
   logger: LoggerFunction
   private slavesRegistry: Laplax.KeyValueMap<cl.Worker> = {}
   private state: Laplax.KeyValueMap = {
     name: 'Jon Snow',
   }
+  private _tasks: string[]
 
-  constructor() {
+  constructor(tasks: string[] = []) {
     this.routesRegistry = []
     this.logger = initLogger('Master', 'italic')
     if (cl.isMaster) global.__Master = this
     if (!global.__exportedRoutes) global.__exportedRoutes = []
     for (const props of global.__exportedRoutes) this.enslave(...props)
+    this._tasks = tasks
   }
 
   get ext() {
@@ -74,6 +80,20 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
     return this.enslave('GET', path, callback)
   }
 
+  private *runTasks(tasks: string[]) {
+    for (let i = 0; i < tasks.length; i++) {
+      const task = tasks[i]
+      const logger = (c: keyof ChalkColors) => initLogger(`Task:${i}`, c)
+
+      yield new Promise((res, rej) => {
+        const p = cp.exec(task)
+        p.stdout && p.stdout.on('data', logger('cyanBright'))
+        p.on('close', res)
+        p.on('error', logger('redBright'))
+      })
+    }
+  }
+
   async *stroll(
     req: Laplax.ShieldReq,
     res: Laplax.ShieldRes,
@@ -102,13 +122,16 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
     res.end()
   }
 
-  async onRequest(_req: http.IncomingMessage, res: http.ServerResponse) {
+  async onRequest(_req: http.IncomingMessage, _res: http.ServerResponse) {
     const method = _req.method as Laplax.HTTPMethod
     const url = _req.url || ''
-    const req: Laplax.ShieldReq = Object.assign({}, _req, {
+    const req: Laplax.ShieldReq = Object.assign(_req, {
       body: await parseBody(_req),
       params: {},
     }) as Laplax.ShieldReq
+    const res: Laplax.ShieldRes = Object.assign(_res, {
+      send: send.bind({}, _res),
+    })
 
     for await (const _ of this.stroll(req, res, method, url)) {
     }
@@ -164,12 +187,12 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
 
   private MasterOnMessage(msg: Laplax.Message) {
     const res: Laplax.SendMessageResponse = {
-      errors: []
+      errors: [],
     }
     for (const req of msg.msgs) {
       const { data, key, error } = this.Database(req)
       res[key] = data
-      if(error) res.errors.push(error)
+      if (error) res.errors.push(error)
     }
     // console.dir(msg, {colors: true, depth: 2})
     this.slavesRegistry[msg.workerId].send(res)
@@ -177,14 +200,16 @@ export class Master<DataType extends Laplax.KeyValueMap = Laplax.KeyValueMap> {
 
   listen(port: number) {
     if (cl.isMaster) {
-      const n = cpus().length
-      for (let i = 0; i < n; i++) {
-        const id = randomEnoughID()
-        const slave = cl.fork({ workerId: id })
-        this.MasterInitEvents(slave, id)
-        this.slavesRegistry[id] = slave
-      }
-      this.logger(`Starting Master @${port} with ${n} Slaves`)
+      Promise.all(this.runTasks(this._tasks)).then(() => {
+        const n = cpus().length
+        for (let i = 0; i < n; i++) {
+          const id = randomEnoughID()
+          const slave = cl.fork({ workerId: id })
+          this.MasterInitEvents(slave, id)
+          this.slavesRegistry[id] = slave
+        }
+        this.logger(`Starting Master @${port} with ${n} Slaves`)
+      })
     } else {
       const server = http.createServer(this.onRequest.bind(this))
       server.listen(port)

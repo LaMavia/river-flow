@@ -146,8 +146,8 @@
         "signature": "c132bcd16907ea62a7ecfa930c3a8554302ed0620b7261f476be3bfeafaee533"
       },
       "/home/tomasz/Desktop/projects/laplax/src/helpers/add.ts": {
-        "version": "b26e6469e73b5fa6a51a5e06061c32b4b45561f8f9e3a16ee6135140ed93e359",
-        "signature": "fa43b3e199b98b11787362006f95dd0606db9bc1ca1d4ca0d72d8dc900bb86b4"
+        "version": "d3a2220d55ee12185bcf5636917ca916fc21670475f0365781cda93470fb70e6",
+        "signature": "22cff2bd3c1357aa3075001172169a22ee8dbc1f1de17b637d475c8352cc3f33"
       },
       "/home/tomasz/Desktop/projects/laplax/src/helpers/randomEnoughID.ts": {
         "version": "f6f0123c50629eb6d76843ebafb1144c095a5730a2ace5b5c5e5d6ab8bfd773c",
@@ -157,21 +157,33 @@
         "version": "e940c910f71e14cb6389b9f806901cc2df3a22c46507a05adfa112bc73e5eddb",
         "signature": "b74251a26e2df1fc8b758dd4373e9c59af326cb3cdb2498ad3793db7f17e72e9"
       },
+      "/home/tomasz/Desktop/projects/laplax/src/helpers/send.ts": {
+        "version": "fcccbcc3e13bd75940fdc7cca1f75e21d23b561bfb8ea4b2a4071d0db5eab866",
+        "signature": "d7f1ec894c8be1c2e12c78f6d4605484b498776a1d6619734c321968decc1334"
+      },
       "/home/tomasz/Desktop/projects/laplax/src/helpers/index.ts": {
-        "version": "20af32de7330936979f293731f709fdaa0b2c0459f0b1ccd87f6bebb0ffe1e06",
-        "signature": "2312074ff8070f3c74a5154974aea179d81f18adb9ed9b1fe073f80a59633f56"
+        "version": "043ef2f406176ade784b6832e53e340799adf30b8e88b0604cd2fc5e26e1c1cb",
+        "signature": "9772d16ef7a93212f80d0fe154ca85424497500b89f8458bfc7224e36b5d6f14"
       },
       "/home/tomasz/Desktop/projects/laplax/src/index.ts": {
         "version": "c9f5e531fe384ab36fa6a8814742babdaf81d78b815221e20d79c97bf89472cd",
         "signature": "26e1c87538f58a69a98ac428375d85faff1c68ddf8c059f56c24864022d7d048"
       },
       "/home/tomasz/Desktop/projects/laplax/types.d.ts": {
-        "version": "5f3840a683a92e5ca71d90af906efd3b927e5ef79154d19bdc0c379902354e11",
-        "signature": "5f3840a683a92e5ca71d90af906efd3b927e5ef79154d19bdc0c379902354e11"
+        "version": "e76cd853b02d6b7d2a43c642ad931a3f16e0adca4f1dc5fd4864c5dd6d39142e",
+        "signature": "e76cd853b02d6b7d2a43c642ad931a3f16e0adca4f1dc5fd4864c5dd6d39142e"
       },
       "/home/tomasz/Desktop/projects/laplax/src/Master.ts": {
-        "version": "4dc1a2e1f5539325c9c5f90ec906d82be0709388b211ce8d1cfecf4695d8d11d",
-        "signature": "8c9a8b910a78059f603979c5edbba99be58a4ec7cb248659b6da07d9962be12f"
+        "version": "ced3057af1181d2247ab365fa3a40fc151e1d0442bf9a4e6a2d1e8206abdd687",
+        "signature": "09ae76f01347f636e8baee0f2a9d72cb35d337b92cbb3ee56bc2aa209910dba2"
+      },
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/chai/index.d.ts": {
+        "version": "c465afa89ac28f74167a2ee7c3c6eb8dd1245c2b3bdaa4704d58d35b932de4b7",
+        "signature": "c465afa89ac28f74167a2ee7c3c6eb8dd1245c2b3bdaa4704d58d35b932de4b7"
+      },
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/mocha/index.d.ts": {
+        "version": "0d2394ead194f57249ac193360c6529ff4b4ec675e3499651eed6baf20867102",
+        "signature": "0d2394ead194f57249ac193360c6529ff4b4ec675e3499651eed6baf20867102"
       },
       "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/globals.d.ts": {
         "version": "3af134c0480536f901a30692d216bd29712a3869fe38a7be066ea1eef34a8561",
@@ -351,7 +363,7 @@
       }
     },
     "options": {
-      "target": 4,
+      "target": 7,
       "module": 1,
       "lib": [
         "lib.esnext.d.ts",
@@ -534,6 +546,12 @@
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/fs.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "/home/tomasz/Desktop/projects/laplax/src/helpers/send.ts": [
+        "/home/tomasz/Desktop/projects/laplax/types.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/http.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "/home/tomasz/Desktop/projects/laplax/src/helpers/index.ts": [
         "/home/tomasz/Desktop/projects/laplax/src/helpers/dynamicPath.ts",
         "/home/tomasz/Desktop/projects/laplax/src/helpers/logger.ts",
@@ -541,6 +559,7 @@
         "/home/tomasz/Desktop/projects/laplax/src/helpers/add.ts",
         "/home/tomasz/Desktop/projects/laplax/src/helpers/randomEnoughID.ts",
         "/home/tomasz/Desktop/projects/laplax/src/helpers/sendMessage.ts",
+        "/home/tomasz/Desktop/projects/laplax/src/helpers/send.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -561,14 +580,19 @@
       "/home/tomasz/Desktop/projects/laplax/src/Master.ts": [
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/http.d.ts",
         "/home/tomasz/Desktop/projects/laplax/types.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/src/helpers/dynamicPath.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/path.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/src/helpers/parseBody.ts",
-        "/home/tomasz/Desktop/projects/laplax/src/helpers/logger.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/cluster.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/os.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/src/helpers/add.ts",
-        "/home/tomasz/Desktop/projects/laplax/src/helpers/randomEnoughID.ts",
+        "/home/tomasz/Desktop/projects/laplax/src/helpers/index.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/child_process.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/chai/index.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/mocha/index.d.ts": [
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -840,6 +864,134 @@
       ]
     },
     "exportedModulesMap": {
+      "/usr/lib/node_modules/typescript/lib/lib.es5.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2016.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2017.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2018.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2019.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.esnext.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.dom.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.core.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.collection.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.generator.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.iterable.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.promise.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.proxy.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.reflect.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.symbol.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2016.array.include.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2017.object.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2017.string.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2017.intl.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2018.asynciterable.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2018.intl.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2018.promise.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2018.regexp.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2019.array.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2019.string.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.es2019.symbol.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.esnext.intl.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "/usr/lib/node_modules/typescript/lib/lib.esnext.bigint.d.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "/home/tomasz/Desktop/projects/laplax/node_modules/chalk/types/index.d.ts": [
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
@@ -862,7 +1014,8 @@
         "/home/tomasz/Desktop/projects/laplax/src/helpers/parseBody.ts",
         "/home/tomasz/Desktop/projects/laplax/src/helpers/add.ts",
         "/home/tomasz/Desktop/projects/laplax/src/helpers/randomEnoughID.ts",
-        "/home/tomasz/Desktop/projects/laplax/src/helpers/sendMessage.ts"
+        "/home/tomasz/Desktop/projects/laplax/src/helpers/sendMessage.ts",
+        "/home/tomasz/Desktop/projects/laplax/src/helpers/send.ts"
       ],
       "/home/tomasz/Desktop/projects/laplax/src/index.ts": [
         "/home/tomasz/Desktop/projects/laplax/src/Master.ts",
@@ -878,7 +1031,7 @@
       ],
       "/home/tomasz/Desktop/projects/laplax/src/Master.ts": [
         "/home/tomasz/Desktop/projects/laplax/types.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/src/helpers/logger.ts",
+        "/home/tomasz/Desktop/projects/laplax/src/helpers/index.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/http.d.ts"
       ],
       "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/globals.d.ts": [
@@ -1147,131 +1300,15 @@
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/globals.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts"
       ],
-      "/usr/lib/node_modules/typescript/lib/lib.es5.d.ts": [
+      "/home/tomasz/Desktop/projects/laplax/src/helpers/send.ts": [
+        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/http.d.ts",
+        "/home/tomasz/Desktop/projects/laplax/types.d.ts"
+      ],
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/chai/index.d.ts": [
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2016.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2017.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2018.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2019.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.esnext.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.dom.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.core.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.collection.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.generator.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.iterable.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.promise.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.proxy.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.reflect.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.symbol.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2016.array.include.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2017.object.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2017.string.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2017.intl.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2018.asynciterable.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2018.intl.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2018.promise.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2018.regexp.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2019.array.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2019.string.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.es2019.symbol.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.esnext.intl.d.ts": [
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
-        "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "/usr/lib/node_modules/typescript/lib/lib.esnext.bigint.d.ts": [
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/mocha/index.d.ts": [
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/util.d.ts",
         "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/ts3.2/util.d.ts"
       ]
@@ -1316,10 +1353,13 @@
       "/home/tomasz/Desktop/projects/laplax/src/helpers/add.ts",
       "/home/tomasz/Desktop/projects/laplax/src/helpers/randomEnoughID.ts",
       "/home/tomasz/Desktop/projects/laplax/src/helpers/sendMessage.ts",
+      "/home/tomasz/Desktop/projects/laplax/src/helpers/send.ts",
       "/home/tomasz/Desktop/projects/laplax/src/helpers/index.ts",
       "/home/tomasz/Desktop/projects/laplax/src/index.ts",
       "/home/tomasz/Desktop/projects/laplax/types.d.ts",
       "/home/tomasz/Desktop/projects/laplax/src/Master.ts",
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/chai/index.d.ts",
+      "/home/tomasz/Desktop/projects/laplax/node_modules/@types/mocha/index.d.ts",
       "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/globals.d.ts",
       "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/assert.d.ts",
       "/home/tomasz/Desktop/projects/laplax/node_modules/@types/node/async_hooks.d.ts",

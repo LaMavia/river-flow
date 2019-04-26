@@ -78,7 +78,12 @@ declare namespace Laplax {
     body: KeyValueMap<any>
   }
 
-  interface ShieldRes extends http.ServerResponse {}
+  interface ShieldRes extends http.ServerResponse {
+    send: <T>(
+      data: T,
+      headers?: Laplax.KeyValueMap
+    ) => void
+  }
 
   interface RouteResponse {
     req: ShieldReq
@@ -101,8 +106,8 @@ declare namespace Laplax {
     payload?: any
   }
 
-  interface ResponseMessage {
-    data: KeyValueMap
+  interface ResponseMessage<T = KeyValueMap> {
+    data: T & KeyValueMap
     error?: Error
   }
 

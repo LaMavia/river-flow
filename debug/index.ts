@@ -1,10 +1,7 @@
 import { Master, initLogger, sendMessage } from '../src'
-import { Laplax } from '../src'
-export interface DataType {
-  name: string
-}
-
-const master = new Master<DataType>()
+const master = new Master([
+  "echo Hello"
+])
 master.enslave('GET', '/', async ({ res }) => {
   const r = await sendMessage(process, {
     msgs: [
@@ -19,7 +16,7 @@ master.enslave('GET', '/', async ({ res }) => {
   
   initLogger(`Slave#${process.env['workerId']}`, "whiteBright")(JSON.stringify(r))
   
-  res.write('HELLO!')
+  res.send('HELLO!')
   return {
     continue: false,
   }
