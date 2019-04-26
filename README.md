@@ -1,6 +1,6 @@
 # Laplax
 A Node.js http/1.0 multithreaded framework with a basic IPC.
-![logo]('https://github.com/LastShadowPL/Laplax/raw/master/logo.svg')
+![logo]('https://github.com/lastshadowpl/laplax-here/raw/master/logo.svg?raw=true')
 
 ## Features
 1. Full intellisense support.
