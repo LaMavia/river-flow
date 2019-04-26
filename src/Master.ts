@@ -1,6 +1,6 @@
 import http from 'http'
 import { Laplax, ChalkColors } from '../types'
-import { extname } from 'path'
+import { extname, resolve } from 'path'
 import cl from 'cluster'
 import { cpus } from 'os'
 import {
@@ -13,10 +13,13 @@ import {
   schemaToRegExp,
 } from './helpers/'
 import cp from 'child_process'
+import { readFile } from 'fs'
+import mime from 'mime'
 
 export class Master {
   routesRegistry: Laplax.SlaveRegistry[]
   logger: LoggerFunction
+  private _public: string = ''
   private slavesRegistry: Laplax.KeyValueMap<cl.Worker> = {}
   private state: Laplax.KeyValueMap = {
     name: 'Jon Snow',
@@ -25,7 +28,10 @@ export class Master {
 
   constructor(tasks: string[] = []) {
     this.routesRegistry = []
-    this.logger = initLogger('Master', 'italic')
+    this.logger = initLogger(
+      cl.isMaster ? 'Master' : `Slave#${process.env['workerId']}`,
+      'italic'
+    )
     if (cl.isMaster) global.__Master = this
     if (!global.__exportedRoutes) global.__exportedRoutes = []
     for (const props of global.__exportedRoutes) this.enslave(...props)
@@ -34,6 +40,24 @@ export class Master {
 
   get ext() {
     return process.mainModule ? extname(process.mainModule.filename) : '.js'
+  }
+
+  set public(v: string) {
+    this._public = v
+
+    if (cl.isMaster) {
+      for (const id in this.slavesRegistry) {
+        this.slavesRegistry[id].send({
+          type: 'order',
+          key: 'public',
+          payload: this._public,
+        } as Laplax.Order)
+      }
+    }
+  }
+
+  get public() {
+    return this._public
   }
 
   static route(props: Laplax.RouteExport) {
@@ -94,6 +118,26 @@ export class Master {
     }
   }
 
+  serverStatic(res: Laplax.ShieldRes, path: string): Promise<boolean> {
+    return new Promise((pres, rej) => {
+      path = path.replace(/^[\\\/]/, '')
+      readFile(
+        resolve(this._public, path),
+        {
+          encoding: 'utf-8',
+        },
+        (err, data) => {
+          if (err) return rej(err)
+          res.statusCode = 200
+          res.send(data, {
+            'Content-Type': mime.getType(path)
+          })
+          pres(true)
+        }
+      )
+    })
+  }
+
   async *stroll(
     req: Laplax.ShieldReq,
     res: Laplax.ShieldRes,
@@ -108,23 +152,23 @@ export class Master {
       continue: true,
       error: null,
       ok: true,
+      supervisor: this
     }
 
-    for (const slave of this.routesRegistry) {
-      if (!slave.path[0].test(path)) continue
-      const msg = await slave.callback(lastMsg)
+    for (const route of this.routesRegistry) {
+      if (!route.path[0].test(path)) continue
+      const msg = await route.callback(lastMsg)
       if (msg) Object.assign(lastMsg, msg)
       yield lastMsg
       if (lastMsg.error) this.logger(lastMsg.error)
       if (!lastMsg.continue || !msg) break
     }
 
-    res.end()
   }
 
   async onRequest(_req: http.IncomingMessage, _res: http.ServerResponse) {
     const method = _req.method as Laplax.HTTPMethod
-    const url = _req.url || ''
+    const path = _req.url || ''
     const req: Laplax.ShieldReq = Object.assign(_req, {
       body: await parseBody(_req),
       params: {},
@@ -133,8 +177,12 @@ export class Master {
       send: send.bind({}, _res),
     })
 
-    for await (const _ of this.stroll(req, res, method, url)) {
+    const served = await this.serverStatic(res, path).catch(console.error)
+    if(served) return res.end()
+
+    for await (const _ of this.stroll(req, res, method, path)) {
     }
+    res.end()
   }
 
   private Database({
@@ -198,6 +246,13 @@ export class Master {
     this.slavesRegistry[msg.workerId].send(res)
   }
 
+  private SlaveInitEvents() {
+    process.on('message', (order: Laplax.Order) => {
+      if (order.type !== 'order') return
+      this[order.key] = order.payload
+    })
+  }
+
   listen(port: number) {
     if (cl.isMaster) {
       Promise.all(this.runTasks(this._tasks)).then(() => {
@@ -213,6 +268,7 @@ export class Master {
     } else {
       const server = http.createServer(this.onRequest.bind(this))
       server.listen(port)
+      this.SlaveInitEvents()
       cl.emit('online')
     }
   }

@@ -1,6 +1,4 @@
 import { Laplax } from '../../types'
-import util from 'util'
-import fs from 'fs'
 
 export const sendMessage = (
   process: NodeJS.Process,

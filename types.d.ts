@@ -90,6 +90,7 @@ declare namespace Laplax {
     res: ShieldRes
     path: string
     method: HTTPMethod
+    supervisor: Master
     ok: boolean
     error: Error | null
     continue: boolean
@@ -104,6 +105,12 @@ declare namespace Laplax {
     type: "get" | "post" | "update" | "delete"
     key: string
     payload?: any
+  }
+
+  interface Order {
+    type: 'order'
+    key: 'public'
+    payload: string
   }
 
   interface ResponseMessage<T = KeyValueMap> {
