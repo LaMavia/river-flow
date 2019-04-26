@@ -1,6 +1,6 @@
 # Laplax
 A Node.js http/1.0 multithreaded framework with a basic IPC.
-<img src="./logo.svg" alt="logo" height=400/>
+![logo](./logo.svg?raw=true)
 
 ## Features
 1. Full intellisense support.
