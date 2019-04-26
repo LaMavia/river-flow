@@ -17,8 +17,9 @@ export const send = <T>(
   data: T,
   headers: Laplax.KeyValueMap = {}
 ) => {
-  res.writeHead(200)
+  res.statusCode = 200
   if (!res.headersSent)
-    for (const header in headers) res.setHeader(header, headers[header])
+    for (const header in headers) 
+      res.setHeader(header, headers[header])
   res.write(switchDataType(data), 'utf-8')
 }

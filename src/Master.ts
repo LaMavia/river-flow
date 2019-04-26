@@ -130,9 +130,9 @@ export class Master {
           if (err) return rej(err)
           res.statusCode = 200
           res.send(data, {
-            'Content-Type': mime.getType(path)
+            'Content-Type': mime.getType(path),
           })
-          pres(true)
+          return pres(true)
         }
       )
     })
@@ -152,7 +152,7 @@ export class Master {
       continue: true,
       error: null,
       ok: true,
-      supervisor: this
+      supervisor: this,
     }
 
     for (const route of this.routesRegistry) {
@@ -163,7 +163,6 @@ export class Master {
       if (lastMsg.error) this.logger(lastMsg.error)
       if (!lastMsg.continue || !msg) break
     }
-
   }
 
   async onRequest(_req: http.IncomingMessage, _res: http.ServerResponse) {
@@ -176,9 +175,12 @@ export class Master {
     const res: Laplax.ShieldRes = Object.assign(_res, {
       send: send.bind({}, _res),
     })
-
-    const served = await this.serverStatic(res, path).catch(console.error)
-    if(served) return res.end()
+    if (/\.\w+$/i.test(path)) {
+      await this.serverStatic(res, path).catch(err => {
+        res.writable && res.writeHead(404, JSON.stringify(err))
+      })
+      return res.end()
+    }
 
     for await (const _ of this.stroll(req, res, method, path)) {
     }
