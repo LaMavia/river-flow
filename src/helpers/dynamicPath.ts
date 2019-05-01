@@ -1,18 +1,18 @@
-import { Laplax } from '../../types'
+import { River } from '../../types'
 
 export const parseURLParams = (
-  req: Laplax.ShieldReq,
+  req: River.Inflow, 
   keys: string[],
   regex: RegExp,
   path: string
-): Laplax.ShieldReq => {
+): River.Inflow => {
   const matches = path.match(regex) || []
   const params = keys.reduce(
     (params, key, i) => {
       params[key] = matches[i]
       return params
     },
-    {} as Laplax.KeyValueMap
+    {} as River.KeyValueMap
   )
 
   req.params = Object.assign(req.params, params)

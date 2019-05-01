@@ -1,9 +1,9 @@
-import { Laplax } from "../../types";
+import { River } from "../../types";
 
 export const add = <T>(
   obj: T,
   payload: any
-): Laplax.ResponseMessage<T> => {
+): River.ResponseMessage<T> => {
   let data, error
   try {
     switch (typeof obj) {

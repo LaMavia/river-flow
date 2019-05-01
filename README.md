@@ -1,4 +1,4 @@
-# Laplax
+# River Flow
 A Node.js http/1.0 multithreaded framework with a basic IPC.
 <img src="./logo.svg"/>
 
@@ -8,8 +8,8 @@ A Node.js http/1.0 multithreaded framework with a basic IPC.
 
 ## Getting started
 ### Installation
-The package includes both: module and typings.
-`npm install laplax`
+The package includes both: module and typings.<br/>
+`npm install river-flow`
 ### Basic Usage
 ```javascript
 const Laplax = require('laplax')

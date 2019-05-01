@@ -1,4 +1,4 @@
-import { Laplax } from '../../types'
+import { River } from '../../types'
 import { ServerResponse } from 'http';
 
 const switchDataType = <T>(x: T) => {
@@ -15,7 +15,7 @@ const switchDataType = <T>(x: T) => {
 export const send = <T>(
   res: ServerResponse,
   data: T,
-  headers: Laplax.KeyValueMap = {}
+  headers: River.KeyValueMap = {}
 ) => {
   res.statusCode = 200
   if (!res.headersSent)

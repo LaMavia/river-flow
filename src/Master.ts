@@ -1,5 +1,5 @@
 import http from 'http'
-import { Laplax, ChalkColors } from '../types'
+import { River, ChalkColors } from '../types'
 import { extname, resolve } from 'path'
 import cl from 'cluster'
 import { cpus } from 'os'
@@ -16,25 +16,26 @@ import cp from 'child_process'
 import { readFile } from 'fs'
 import mime from 'mime'
 
-export class Master {
-  routesRegistry: Laplax.SlaveRegistry[]
+export class Flow {
+  routesRegistry: River.SlaveRegistry[]
+  mwdRegistry: River.Shieldback[]
   logger: LoggerFunction
   private _public: string = ''
-  private slavesRegistry: Laplax.KeyValueMap<cl.Worker> = {}
-  private state: Laplax.KeyValueMap = {
+  private slavesRegistry: River.KeyValueMap<cl.Worker> = {}
+  private state: River.KeyValueMap = {
     name: 'Jon Snow',
   }
   private _tasks: string[]
 
   constructor(tasks: string[] = []) {
     this.routesRegistry = []
+    this.mwdRegistry = []
     this.logger = initLogger(
       cl.isMaster ? 'Master' : `Slave#${process.env['workerId']}`,
       'italic'
     )
-    if (cl.isMaster) global.__Master = this
-    if (!global.__exportedRoutes) global.__exportedRoutes = []
-    for (const props of global.__exportedRoutes) this.enslave(...props)
+    if (cl.isMaster) global.__Flow = this
+    this.consumeFlow()
     this._tasks = tasks
   }
 
@@ -51,7 +52,7 @@ export class Master {
           type: 'order',
           key: 'public',
           payload: this._public,
-        } as Laplax.Order)
+        } as River.Order)
       }
     }
   }
@@ -60,56 +61,79 @@ export class Master {
     return this._public
   }
 
-  static route(props: Laplax.RouteExport) {
+  static route(props: River.RouteExport) {
     if (!global.__exportedRoutes) global.__exportedRoutes = []
     global.__exportedRoutes.push(props)
   }
 
-  enslave(
-    method: Laplax.HTTPMethod,
-    path: string,
-    callback: Laplax.Shieldback
-  ) {
+  static middleware(middleware: River.Shieldback) {
+    if (!global.__exportedMdw) global.__exportedMdw = []
+    global.__exportedMdw.push(middleware)
+  }
+
+  private consumeFlow() {
+    if (!global.__exportedRoutes) global.__exportedRoutes = []
+    if (!global.__exportedMdw) global.__exportedMdw = []
+    let r: River.RouteExport
+    // @ts-ignore
+    while ((r = global.__exportedRoutes.shift())) {
+      this.enslave(...r)
+    }
+
+    let m: River.Shieldback
+    // @ts-ignore
+    while ((m = global.__exportedMdw.shift())) this.gate(m)
+  }
+
+  enslave(method: River.HTTPMethod, path: string, callback: River.Shieldback) {
     const reg = {
       method,
       path: schemaToRegExp(path),
       callback,
-    } as Laplax.SlaveRegistry
+    } as River.SlaveRegistry
 
     if (this.routesRegistry) {
       this.routesRegistry.push(reg)
+      this.logger(`Initializing a route "${reg.method}: ${path}"`)
+      /* UNCOMMENT IF SWITCHING TO THE MULTI-MATCH ROUTING */
+      /*
       this.routesRegistry = this.routesRegistry.sort((a, b) => {
         const gl = (a: any): number =>
           (a.path[0].source.match(/\//) || []).length
         debugger
         return gl(b) - gl(a)
-      })
+      })*/
     }
     return reg
   }
 
-  get(path: string, callback: Laplax.Shieldback) {
+  gate(middleware: River.Shieldback) {
+    this.mwdRegistry.push(middleware)
+    this.logger(`Initializing a middleware ${middleware.name}`)
+  }
+
+  get(path: string, callback: River.Shieldback) {
     return this.enslave('GET', path, callback)
   }
 
-  post(path: string, callback: Laplax.Shieldback) {
+  post(path: string, callback: River.Shieldback) {
     return this.enslave('POST', path, callback)
   }
 
-  delete(path: string, callback: Laplax.Shieldback) {
+  delete(path: string, callback: River.Shieldback) {
     return this.enslave('DELETE', path, callback)
   }
 
-  update(path: string, callback: Laplax.Shieldback) {
+  update(path: string, callback: River.Shieldback) {
     return this.enslave('GET', path, callback)
   }
 
-  private *runTasks(tasks: string[]) {
+  private async *runTasks(tasks: string[]) {
     for (let i = 0; i < tasks.length; i++) {
       const task = tasks[i]
       const logger = (c: keyof ChalkColors) => initLogger(`Task:${i}`, c)
 
-      yield new Promise((res, rej) => {
+      yield await new Promise((res, rej) => {
         const p = cp.exec(task)
         p.stdout && p.stdout.on('data', logger('cyanBright'))
         p.on('close', res)
@@ -118,80 +142,93 @@ export class Master {
     }
   }
 
-  serverStatic(res: Laplax.ShieldRes, path: string): Promise<boolean> {
-    return new Promise((pres, rej) => {
-      path = path.replace(/^[\\\/]/, '')
-      readFile(
-        resolve(this._public, path),
-        {
-          encoding: 'utf-8',
-        },
-        (err, data) => {
-          if (err) return rej(err)
-          res.statusCode = 200
-          res.send(data, {
-            'Content-Type': mime.getType(path),
-          })
-          return pres(true)
-        }
-      )
-    })
+  serverStatic(res: River.Outflow, path: string): void {
+    path = path.replace(/^[\\\/]/, '')
+    readFile(
+      resolve(this._public, path),
+      {
+        encoding: 'utf-8',
+      },
+      (err, data) => {
+        if (err && res.writable) return res.writeHead(404, JSON.stringify(err))
+        res.statusCode = 200
+        res.send(data, {
+          'Content-Type': mime.getType(path),
+        })
+        res.end()
+      }
+    )
   }
 
-  async *stroll(
-    req: Laplax.ShieldReq,
-    res: Laplax.ShieldRes,
-    method: Laplax.HTTPMethod,
+  async stream(
+    req: River.Inflow,
+    res: River.Outflow,
+    method: River.HTTPMethod,
     path: string
-  ): AsyncIterableIterator<Laplax.RouteResponse> {
-    let lastMsg: Laplax.RouteResponse = {
-      req,
-      res,
-      path,
-      method,
-      continue: true,
-      error: null,
-      ok: true,
-      supervisor: this,
-    }
-
-    for (const route of this.routesRegistry) {
-      if (!route.path[0].test(path)) continue
-      const msg = await route.callback(lastMsg)
-      if (msg) Object.assign(lastMsg, msg)
-      yield lastMsg
-      if (lastMsg.error) this.logger(lastMsg.error)
-      if (!lastMsg.continue || !msg) break
+  ) {
+    const route = this.routesRegistry.find(
+      r => r.path[0].test(path) && r.method === method
+    )
+    if (!route) {
+      res.writeHead(404, `Route ${path} not found`)
+    } else {
+      let mdwMsg: River.RouteResponse = {
+        req,
+        res,
+        path,
+        method,
+        continue: true,
+        error: null,
+        ok: true,
+        supervisor: this,
+      }
+      for (const mdw of this.mwdRegistry) {
+        const msg = await mdw(mdwMsg)
+        if (msg && msg.error)
+          return res.writeHead(405, String(msg.error)), res.end()
+        if (msg && !msg.continue)
+          return res.writeHead(418, 'You shall not pass'), res.end()
+      }
+      Promise.resolve(
+        route.callback({
+          req,
+          res,
+          path,
+          method,
+          continue: true,
+          error: null,
+          ok: true,
+          supervisor: this,
+        })
+      ).then((msg: River.SBReturnType) => {
+        if (msg && msg.error) this.logger(msg.error)
+        res.end()
+      })
     }
   }
 
   async onRequest(_req: http.IncomingMessage, _res: http.ServerResponse) {
-    const method = _req.method as Laplax.HTTPMethod
+    const method = _req.method as River.HTTPMethod
     const path = _req.url || ''
-    const req: Laplax.ShieldReq = Object.assign(_req, {
+    const req: River.Inflow = Object.assign(_req, {
       body: await parseBody(_req),
       params: {},
-    }) as Laplax.ShieldReq
-    const res: Laplax.ShieldRes = Object.assign(_res, {
+    }) as River.Inflow
+    const res: River.Outflow = Object.assign(_res, {
       send: send.bind({}, _res),
     })
     if (/\.\w+$/i.test(path)) {
-      await this.serverStatic(res, path).catch(err => {
-        res.writable && res.writeHead(404, JSON.stringify(err))
-      })
-      return res.end()
+      this.serverStatic(res, path)
+    } else {
+      this.stream(req, res, method, path)
     }
-
-    for await (const _ of this.stroll(req, res, method, path)) {
-    }
-    res.end()
   }
 
   private Database({
     type,
     payload,
     key,
-  }: Laplax.MessageRequest): Laplax.DBResponseMessage {
+  }: River.MessageRequest): River.DBResponseMessage {
     let data: any
     let error: any
     try {
@@ -235,8 +272,8 @@ export class Master {
     })
   }
 
-  private MasterOnMessage(msg: Laplax.Message) {
-    const res: Laplax.SendMessageResponse = {
+  private MasterOnMessage(msg: River.Message) {
+    const res: River.SendMessageResponse = {
       errors: [],
     }
     for (const req of msg.msgs) {
@@ -249,25 +286,29 @@ export class Master {
   }
 
   private SlaveInitEvents() {
-    process.on('message', (order: Laplax.Order) => {
+    process.on('message', (order: River.Order) => {
       if (order.type !== 'order') return
       this[order.key] = order.payload
     })
   }
 
-  listen(port: number) {
+  async listen(port: number) {
     if (cl.isMaster) {
-      Promise.all(this.runTasks(this._tasks)).then(() => {
-        const n = cpus().length
-        for (let i = 0; i < n; i++) {
-          const id = randomEnoughID()
-          const slave = cl.fork({ workerId: id })
-          this.MasterInitEvents(slave, id)
-          this.slavesRegistry[id] = slave
-        }
-        this.logger(`Starting Master @${port} with ${n} Slaves`)
-      })
+      for await (const _ of this.runTasks(this._tasks)) {
+      }
+      const n = 4 // cpus().length
+      for (let i = 0; i < n; i++) {
+        cl.setupMaster({
+          inspectPort: 6000 + i,
+        })
+        const id = randomEnoughID()
+        const slave = cl.fork({ workerId: id })
+        this.MasterInitEvents(slave, id)
+        this.slavesRegistry[id] = slave
+      }
+      this.logger(`Starting Master @${port} with ${n} Slaves`)
     } else {
+      this.consumeFlow()
       const server = http.createServer(this.onRequest.bind(this))
       server.listen(port)
       this.SlaveInitEvents()

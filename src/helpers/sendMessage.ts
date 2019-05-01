@@ -1,12 +1,12 @@
-import { Laplax } from '../../types'
+import { River } from '../../types'
 
 export const sendMessage = (
   process: NodeJS.Process,
-  msg: Laplax.Message
-): Promise<Laplax.ResponseMessage> =>
+  msg: River.Message
+): Promise<River.ResponseMessage> =>
   new Promise((res, rej) => {
     if (!process.send) throw new Error('Process.send in undefiend')
-    function onRes(msg: Laplax.ResponseMessage) {
+    function onRes(msg: River.ResponseMessage) {
       process.removeListener('message', onRes)
       res(msg)
     }

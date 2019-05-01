@@ -1,6 +1,6 @@
 import http from 'http'
 import { Chalk } from 'chalk'
-import { Master } from './src'
+import { River, Flow } from './src'
 import './src/index'
 
 declare interface ChalkColors {
@@ -52,9 +52,9 @@ declare interface ChalkColors {
   readonly bgWhiteBright: Chalk
 }
 
-declare type Executable<T> = (arg: Laplax.KeyValueMap) => T
+declare type Executable<T> = (arg: River.KeyValueMap) => T
 
-declare namespace Laplax {
+declare namespace River {
   interface KeyValueMap<T = any> {
     [key: string]: T
   }
@@ -73,24 +73,24 @@ declare namespace Laplax {
     callback: Shieldback
   }
 
-  interface ShieldReq extends http.IncomingMessage {
+  interface Inflow extends http.IncomingMessage {
     params: KeyValueMap<string>
     body: KeyValueMap<any>
   }
 
-  interface ShieldRes extends http.ServerResponse {
+  interface Outflow extends http.ServerResponse {
     send: <T>(
       data: T,
-      headers?: Laplax.KeyValueMap
+      headers?: River.KeyValueMap
     ) => void
   }
 
   interface RouteResponse {
-    req: ShieldReq
-    res: ShieldRes
+    req: Inflow
+    res: Outflow
     path: string
     method: HTTPMethod
-    supervisor: Master
+    supervisor: Flow
     ok: boolean
     error: Error | null
     continue: boolean
@@ -129,8 +129,9 @@ declare namespace Laplax {
 declare global {
   namespace NodeJS {
     interface Global {
-      __Master: Master
-      __exportedRoutes: Laplax.RouteExport[]
+      __Flow: Flow
+      __exportedRoutes: River.RouteExport[]
+      __exportedMdw: River.Shieldback[]
     }
 
     interface ProcessEnv {

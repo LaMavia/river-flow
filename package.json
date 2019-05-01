@@ -1,6 +1,6 @@
 {
-  "name": "laplax",
-  "version": "0.1.4",
+  "name": "river-flow",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
